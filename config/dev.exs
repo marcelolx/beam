@@ -14,6 +14,8 @@ config :oorja_beam, OorjaBeamWeb.Endpoint,
   check_origin: false,
   watchers: []
 
+config :oorja_beam,
+  oorja: %{ host: "http://localhost:3000", secret: "abcd" }
 # ## SSL Support
 #
 # In order to use HTTPS in development, a self-signed
@@ -36,3 +38,5 @@ config :logger, :console, format: "[$level] $message\n"
 # Set a higher stacktrace during development. Avoid configuring such
 # in production as building large stacktraces may be expensive.
 config :phoenix, :stacktrace_depth, 20
+
+  

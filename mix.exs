@@ -19,7 +19,7 @@ defmodule OorjaBeam.Mixfile do
   def application do
     [
       mod: {OorjaBeam.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :httpotion]
     ]
   end
 
@@ -35,7 +35,9 @@ defmodule OorjaBeam.Mixfile do
       {:phoenix, "~> 1.3.0"},
       {:phoenix_pubsub, "~> 1.0"},
       {:gettext, "~> 0.11"},
-      {:cowboy, "~> 1.0"}
+      {:cowboy, "~> 1.0"},
+      {:httpotion, "~> 3.1.0"},
+      {:poison, "~> 3.1"}
     ]
   end
 end
