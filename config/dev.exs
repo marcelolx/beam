@@ -7,7 +7,7 @@ use Mix.Config
 # watchers to your application. For example, we use it
 # with brunch.io to recompile .js and .css sources.
 config :oorja_beam, OorjaBeamWeb.Endpoint,
-  https: [port: 4000, keyfile: "priv/server.key", certfile: "priv/server.pem"],
+  # https: [port: 4000, keyfile: "priv/server.key", certfile: "priv/server.pem"],
   http: [port: 5000],
   debug_errors: true,
   code_reloader: true,
