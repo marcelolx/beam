@@ -3,9 +3,9 @@ defmodule Oorja.Client do
 
   def decode_token(type, token) do
     %{ type: type, token: token}
-    |>Poison.encode!
-    |>(&(post("/api/v1/private/decode_token", [ body: &1 ]).body)).()
-    |>Map.get("data")
+    |> Poison.encode!
+    |> (&(post("/api/v1/private/decode_token", [ body: &1 ]).body)).()
+    |> Map.get("data")
   end
 
   # Internal #########

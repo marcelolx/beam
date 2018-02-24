@@ -2,7 +2,7 @@ defmodule OorjaBeamWeb.UserSocket do
   use Phoenix.Socket
 
   ## Channels
-  # channel "room:*", OorjaBeamWeb.RoomChannel
+  channel "room:*", OorjaBeamWeb.RoomChannel
 
   ## Transports
   transport :websocket, Phoenix.Transports.WebSocket
