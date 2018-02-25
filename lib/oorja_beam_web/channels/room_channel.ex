@@ -2,9 +2,10 @@ defmodule OorjaBeamWeb.RoomChannel do
   use OorjaBeamWeb, :channel
   alias OorjaBeamWeb.Presence
 
-  def join("room:" <> room_id, %{ "room_token" => room_token, "session_id" => session_id }, socket) do
+  def join("room:" <> room_id, %{ "room_token" => room_token, "session" => session }, socket) do
     if authorized?(room_id, room_token) do
       send(self(), :after_join)
+      %{ session_id: session_id } = Oorja.Utils.unpack_session(session)
       {:ok, assign(socket, :session_id, session_id)}
     else
       {:error, %{reason: "unauthorized"}}
