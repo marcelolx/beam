@@ -2,11 +2,13 @@ defmodule OorjaBeamWeb.RoomChannel do
   use OorjaBeamWeb, :channel
   alias OorjaBeamWeb.Presence
 
-  def join("room:" <> room_id, %{ "room_token" => room_token, "session" => session }, socket) do
+  def join("room:" <> room_id, %{ "room_token" => room_token, "session_id" => session_id }, socket) do
     if authorized?(room_id, room_token) do
       send(self(), :after_join)
-      %{ session_id: session_id } = Oorja.Utils.unpack_session(session)
-      {:ok, assign(socket, :session_id, session_id)}
+      %{ user_id: user_id} = socket.assigns
+      socket = assign(socket, :room_id, room_id)
+      socket = assign(socket, :session, Oorja.Utils.pack_session(user_id ,session_id))
+      {:ok, socket}
     else
       {:error, %{reason: "unauthorized"}}
     end
@@ -20,17 +22,10 @@ defmodule OorjaBeamWeb.RoomChannel do
 
   def handle_info(:after_join, socket) do
     push socket, "presence_state", Presence.list(socket)
-    %{ user_id: user_id, session_id: session_id } = socket.assigns
-    {:ok, _} = Presence.track(socket, "#{user_id}:#{session_id}", %{
+    %{ session: session } = socket.assigns
+    {:ok, _} = Presence.track(socket, session, %{
       online_at: inspect(System.system_time(:seconds))
     })
-    {:noreply, socket}
-  end
-
-  # It is also common to receive messages from the client and
-  # broadcast to everyone in the current topic (room:lobby).
-  def handle_in("shout", payload, socket) do
-    broadcast socket, "shout", payload
     {:noreply, socket}
   end
 
