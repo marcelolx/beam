@@ -2,6 +2,8 @@ defmodule OorjaBeamWeb.RoomChannel do
   use OorjaBeamWeb, :channel
   alias OorjaBeamWeb.Presence
 
+  intercept ["direct_msg"]
+
   def join("room:" <> room_id, %{ "room_token" => room_token, "session_id" => session_id }, socket) do
     if authorized?(room_id, room_token) do
       send(self(), :after_join)
@@ -15,9 +17,31 @@ defmodule OorjaBeamWeb.RoomChannel do
   end
 
   def handle_in("new_msg", %{ "broadcast" => true } = message, socket) do
-    # no recepients specified. broadcast the message
     broadcast_from!(socket, "new_msg", put_sender_label(message, socket))
     {:noreply, socket}
+  end
+
+  def handle_in("new_msg", %{ "to" => _recipients } = message, socket) do
+    broadcast_from!(socket, "direct_msg", put_sender_label(message, socket))
+    {:noreply, socket}
+  end
+
+  def handle_out("direct_msg", %{ "to" => recipients } = message, socket) do
+    if is_recipient?(recipients, get_address(socket.assigns)) do
+      push socket, "new_msg", message
+      {:noreply, socket}
+    else
+      {:noreply, socket}
+    end
+  end
+
+  def is_recipient?(recipients, address) do
+    Enum.any?(recipients, fn recipient ->
+      case recipient do
+        %{ "session" => session } -> session === Map.get(address, :session)
+        %{ "userId" => user_id } -> user_id === Map.get(address, :user_id)
+      end
+    end)
   end
 
   def put_sender_label(message, socket) do
