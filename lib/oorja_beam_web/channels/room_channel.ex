@@ -14,10 +14,20 @@ defmodule OorjaBeamWeb.RoomChannel do
     end
   end
 
-  # Channels can be used in a request/response fashion
-  # by sending replies to requests from the client
-  def handle_in("ping", payload, socket) do
-    {:reply, {:ok, payload}, socket}
+  def handle_in("new_msg", %{ "broadcast" => true } = message, socket) do
+    # no recepients specified. broadcast the message
+    broadcast_from!(socket, "new_msg", put_sender_label(message, socket))
+    {:noreply, socket}
+  end
+
+  def put_sender_label(message, socket) do
+    sender = get_address(socket.assigns)
+    Map.put(message, "from", sender)
+  end
+
+
+  def get_address(assigns) do
+    Map.take(assigns, [ :user_id, :session ])
   end
 
   def handle_info(:after_join, socket) do
