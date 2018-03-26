@@ -2,7 +2,6 @@ defmodule OorjaBeamWeb.RoomController do
   use OorjaBeamWeb, :controller
 
   def push_room_event(conn, params) do
-    IO.inspect params
     channel = "room:#{params["room_id"]}"
     event = params["event"]
     payload = params["payload"]

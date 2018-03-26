@@ -20,7 +20,6 @@ defmodule OorjaBeamWeb.UserSocket do
   # See `Phoenix.Token` documentation for examples in
   # performing token verification on connect.
   def connect(params, socket) do
-    IO.inspect params
     case Oorja.Client.decode_token("user", params["user_token"]) do
       %{ "user_id" => user_id } ->
         socket = socket
@@ -29,7 +28,7 @@ defmodule OorjaBeamWeb.UserSocket do
 
       _ -> :error
     end
-    
+
   end
 
   # Socket id's are topics that allow you to identify all sockets for a given user:
