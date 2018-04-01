@@ -7,4 +7,9 @@ defmodule Oorja.Utils do
   def pack_session(user_id, session_id) do
     "#{user_id}:#{session_id}"
   end
+
+  def get_api_secret do
+    %{ secret: secret } = Application.get_env(:oorja_beam, :oorja)
+    secret
+  end
 end

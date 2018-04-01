@@ -8,11 +8,6 @@ defmodule Oorja.Client do
     |> Map.get("data")
   end
 
-  def get_api_secret do
-    %{ secret: secret } = Application.get_env(:oorja_beam, :oorja)
-    secret
-  end
-
   # Internal #########
 
   def process_url(path) do
@@ -21,7 +16,7 @@ defmodule Oorja.Client do
   end
 
   def process_request_headers(headers) do
-    Keyword.merge headers, [ "Content-Type": "application/json", "oorja-secret": get_api_secret() ]
+    Keyword.merge headers, [ "Content-Type": "application/json", "oorja-secret": Oorja.Utils.get_api_secret() ]
   end
 
   def process_response_body(body) do

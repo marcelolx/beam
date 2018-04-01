@@ -7,7 +7,7 @@ defmodule API.Auth do
 
   def call(conn, _opts) do
     [ secret ] = get_req_header(conn, "secret")
-    if Oorja.Client.get_api_secret() === secret do
+    if Oorja.Utils.get_api_secret() === secret do
       conn
     else
       conn
