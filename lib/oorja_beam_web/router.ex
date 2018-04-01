@@ -3,6 +3,7 @@ defmodule OorjaBeamWeb.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
+    plug API.Auth
   end
 
   scope "/api/v1/", OorjaBeamWeb do
