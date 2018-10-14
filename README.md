@@ -6,7 +6,7 @@ A microservice used in [oorja](https://github.com/akshayKMR/oorja) for soft-real
 ### Why make a microservice?
 - oorja needed a realtime messaging functionality between room participants. Elixir felt like the perfect tool I could use for this purpose. It's fault tolerant, highly availabile and distributed. You get a lot of stuff for free.
 - Phoenix framework can also track user presence using distributed pubsub.
-- Performance: Initial version of oorja used to watch mongodb oplog for any updates to the `Room` documents and then used to push the changeset to the room participants. It is how pub/sub works in a meteor app. However cpu usage grows with the number of subscriptions. Now the backend knows when a room document has changed since it is solely responsible for it, so instead of watching the db for changes, the backend now hits Beam to broadcast an event that the *room document is updated*. Anyone subscribed to the room channel can fetch the updates when they recieve such an event. So in affect pub/sub was removed from the meteor app, bringing down its cpu usage.
+- Performance: Initial version of oorja used to watch mongodb oplog for any updates to the `Room` documents and then used to push the changeset to the room participants. It is how pub/sub works in a meteor app. However cpu usage grows with the number of subscriptions. Now the backend knows when a room document has changed since it is solely responsible for it, so instead of watching the db for changes, the backend now hits Beam to broadcast an event that the *room document is updated*. Anyone subscribed to the room channel can fetch the updates when they recieve such an event. So in efect pub/sub cpu usage went down
 
 
 ### Running the app
